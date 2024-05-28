@@ -18,22 +18,22 @@ model = "gpt-4o"
 
 # Step 1. create a vector store and upload a file to OpenAI embeddings ===
 # rb => binary reading
-vector_store = client.beta.vector_stores.create(name="CryptoCurrency")
+# vector_store = client.beta.vector_stores.create(name="CryptoCurrency")
 
-filepath = 'cryptocurrency.pdf'
+# filepath = 'cryptocurrency.pdf'
 
 # file_stream = [open(path, "rb") for path in filepath]
-file_stream = [open(filepath, "rb")]
+# file_stream = [open(filepath, "rb")]
 
 # Use the upload and poll SDK helper to upload the files, add them to the vector store,
 # and poll the status of the file batch for completion.
-file_batch = client.beta.vector_stores.file_batches.upload_and_poll(
-    vector_store_id=vector_store.id, files=file_stream
-)
+# file_batch = client.beta.vector_stores.file_batches.upload_and_poll(
+#     vector_store_id=vector_store.id, files=file_stream
+# )
 
 # You can print the status and the file counts of the batch to see the result of this operation.
-print(file_batch.status)
-print(file_batch.file_counts)
+# print(file_batch.status)
+# print(file_batch.file_counts)
 
 # assistant = client.beta.assistants.update(
 #   assistant_id=assistant.id,
@@ -48,33 +48,33 @@ print(file_batch.file_counts)
 
 
 # Step 2 - Create an assistant
-assistant = client.beta.assistants.create(
-    name="Study Buddy",
-    instructions="""You are a helpful study assistant who knows a lot about understanding research papers.
-    Your role is to summarize papers, clarify terminology within context, and extract key figures and data.
-    Cross-reference information for additional insights and answer related questions comprehensively.
-    Analyze the papers, noting strengths and limitations.
-    Respond to queries effectively, incorporating feedback to enhance your accuracy.
-    Handle data securely and update your knowledge base with the latest research.
-    Adhere to ethical standards, respect intellectual property, and provide users with guidance on any limitations.
-    Maintain a feedback loop for continuous improvement and user support.
-    Your ultimate goal is to facilitate a deeper understanding of complex scientific material, making it more accessible and comprehensible.""",
-    tools=[{"type": "file_search"}],
-    model=model,
-)
+# assistant = client.beta.assistants.create(
+#     name="Study Buddy",
+#     instructions="""You are a helpful study assistant who knows a lot about understanding research papers.
+#     Your role is to summarize papers, clarify terminology within context, and extract key figures and data.
+#     Cross-reference information for additional insights and answer related questions comprehensively.
+#     Analyze the papers, noting strengths and limitations.
+#     Respond to queries effectively, incorporating feedback to enhance your accuracy.
+#     Handle data securely and update your knowledge base with the latest research.
+#     Adhere to ethical standards, respect intellectual property, and provide users with guidance on any limitations.
+#     Maintain a feedback loop for continuous improvement and user support.
+#     Your ultimate goal is to facilitate a deeper understanding of complex scientific material, making it more accessible and comprehensible.""",
+#     tools=[{"type": "file_search"}],
+#     model=model,
+# )
 
-assistant = client.beta.assistants.update(
-  assistant_id=assistant.id,
-  tool_resources={"file_search": {"vector_store_ids": [vector_store.id]}},
-)
+# assistant = client.beta.assistants.update(
+#   assistant_id=assistant.id,
+#   tool_resources={"file_search": {"vector_store_ids": [vector_store.id]}},
+# )
 
 # === Get assistant ID
-assis_id = assistant.id
-print(assis_id)
+# assis_id = assistant.id
+# print(assis_id)
 
 # === Hardcoded ids to be used once the first code run is done and the assistant was created
-# thread_id = ""
-# assis_id = ""
+thread_id = "thread_WiUMOjgbZgHBT3A5h7561oQG"
+assis_id = "asst_5YuEIz5HJ7vsq6P76kOpVhdW"
 
 
 
@@ -83,9 +83,17 @@ print(assis_id)
 # === Step 3. Create a Thread
 message = "What is mining?"
 
-thread = client.beta.threads.create()
-thread_id = thread.id
-print(thread_id)
+# thread = client.beta.threads.create()
+# thread_id = thread.id
+# print(thread_id)
+
+message = client.beta.threads.messages.create(
+    thread_id=thread_id,
+    role="user",
+    content=message
+)
+
+
 
 # === Run The Assistant
 
